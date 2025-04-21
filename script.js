@@ -23,3 +23,12 @@ L.Control.geocoder({ defaultMarkGeocode: false }).on('markgeocode', function(e) 
 
     map.fitBounds(poly.getBounds());
 }).addTo(map);
+
+
+// Initialiser Supabase-klienten
+const { createClient } = supabase;
+
+// Supabase URL og API-nøkkel (finnes i Supabase-prosjektet ditt)
+const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdHRzeXdsaHNoaXZmc3lzd3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2MzQzMjQsImV4cCI6MjA2MDIxMDMyNH0.bEJZQOS5bqHmDrO1vNCkX0hirsz7zDp1QsBxdoywxbA';
+const HEADERS = { 'apikey': API_KEY, 'Authorization': `Bearer ${API_KEY}` };
