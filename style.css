@@ -15,34 +15,47 @@
      display: inline-block;
      margin-right: 5px;
  }
- /* Stil for knappen */
- #showRouteInfo, #showRoute, #showHytter {
+ #menu {
     position: absolute;
     top: 10px;
-    right: 10px; /* Flytt knappene til høyre */
+    right: 10px;
     z-index: 1000;
-    color: white; /* Hvit tekst */
-    border: none; /* Fjern kantlinje */
-    border-radius: 5px; /* Runde hjørner */
-    padding: 10px 15px; /* Polstring */
-    font-size: 14px; /* Tekststørrelse */
-    cursor: pointer; /* Endre musepekeren til hånd */
-    box-shadow: 0 4px 6px rgb(253, 252, 252); /* Skygge */
-    transition: background-color 0.3s ease; 
 }
 
-/* Legg til spesifikk plassering for hver knapp */
-#showRouteInfo {
-    top: 10px; /* Øverst */
+#toggleMenu {
     background-color: #0074D9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-#showRoute {
-    top: 50px;
-    background-color: #0b0a0a;
+#menuContent {
+    display: none; /* Skjul menyen som standard */
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    width: 200px; /* Sett en bredde som passer til knappene */
 }
 
-#showHytter {
-    top: 90px;
-    background-color: #FF4136;
+#menuContent button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    background-color: #0074D9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+#menuContent button:hover {
+    background-color: #0056a3;
