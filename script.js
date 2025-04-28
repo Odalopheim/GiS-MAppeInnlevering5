@@ -37,3 +37,10 @@ showRouteInfoButton.addEventListener('click', async () => {
         isRouteInfoVisible = true;
     }
 });
+
+const gpxURL = "https://ws.geonorge.no/hoydedata/v1/";
+const endpoint = `http://openwps.statkart.no/skwms1/wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevation&datainputs=lat=60;lon=10;epsg=4326${encodeURIComponent(gpxURL)}`;
+
+fetch(endpoint)
+  .then(res => res.json())
+  .then(data => console.log("Høgdeprofil:", data));
