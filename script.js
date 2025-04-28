@@ -30,7 +30,7 @@ const showHytterButton = document.getElementById('showHytter');
 // Variabler for synlighetsstatus
 let isRouteInfoVisible = false;
 let isRouteVisible = false;
-let isHytterVisible = true;
+let isHytterVisible = false;
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {
@@ -49,13 +49,14 @@ showRouteInfoButton.addEventListener('click', async () => {
 
 // Legg til klikkhendelse for å vise/skjule hytter
 showHytterButton.addEventListener('click', async () => {
+    console.log('Knappen for hytter ble trykket');
     if (isHytterVisible) {
         map.removeLayer(hytterLayer);
         showHytterButton.textContent = 'Vis Hytter';
         isHytterVisible = false;
     } else {
         showHytterButton.textContent = 'Laster...';
-        await fetchGeoJSON(map, hytterLayer);
+        await fetchGeoJSONHytter(map, hytterLayer);
         hytterLayer.addTo(map);
         showHytterButton.textContent = 'Skjul Hytter';
         isHytterVisible = true;
