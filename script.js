@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
 import { fetchGeoJSONAnnen } from './annenrute.js';
 
+
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdHRzeXdsaHNoaXZmc3lzd3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2MzQzMjQsImV4cCI6MjA2MDIxMDMyNH0.bEJZQOS5bqHmDrO1vNCkX0hirsz7zDp1QsBxdoywxbA';
@@ -16,14 +17,17 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 // Lag nytt lag for ruteinfopunkter og linjer
 const ruteinfopunktLayer = L.layerGroup();
 const ruterLayer = L.layerGroup();
+ 
 
 // Hent knapper fra HTML
 const showRouteInfoButton = document.getElementById('showRouteInfo');
 const showRouteButton = document.getElementById('showRoute');
 
+
 // Variabler for synlighetsstatus
 let isRouteInfoVisible = false;
 let isRouteVisible = false;
+
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {

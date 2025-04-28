@@ -16,12 +16,11 @@
      margin-right: 5px;
  }
  /* Stil for knappen */
-#showRouteInfo, #showRoute {
+ #showRouteInfo, #showRoute {
     position: absolute;
     top: 10px;
-    right: 10px; /* Flytt knappen til høyre */
+    right: 10px; /* Flytt knappene til høyre */
     z-index: 1000;
-    background-color: #0074D9; /* Blå bakgrunn */
     color: white; /* Hvit tekst */
     border: none; /* Fjern kantlinje */
     border-radius: 5px; /* Runde hjørner */
@@ -30,4 +29,15 @@
     cursor: pointer; /* Endre musepekeren til hånd */
     box-shadow: 0 4px 6px rgb(253, 252, 252); /* Skygge */
     transition: background-color 0.3s ease; 
+}
+
+/* Legg til spesifikk plassering for hver knapp */
+#showRouteInfo {
+    top: 10px; /* Øverst */
+    background-color: #0074D9;
+}
+
+#showRoute {
+    top: 50px;
+    background-color: #0b0a0a;
 }
