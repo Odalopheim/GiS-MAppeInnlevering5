@@ -22,7 +22,7 @@ export function customMarker(feature, latlng, color = "#0074D9") {
 export async function fetchGeoJSONHytter(map, layerGroup) {
     const { data, error } = await supabase
         .from('DNT_Hytter_view') // Bruker en view fra Supabase som allerede har GeoJSON-formatet
-        .select('id, Navn , Komunne, Betjeningsgrad, Sengeplasser, geom'); // geom er allerede i GeoJSON-format
+        .select('id,"Navn ","Komunne",  "Betjeningsgrad","Sengeplasser", geom'); // geom er allerede i GeoJSON-format
 
     if (error) {
         console.error('Feil ved henting av data:', error);
@@ -36,7 +36,10 @@ export async function fetchGeoJSONHytter(map, layerGroup) {
             geometry: item.geom, // Direkte bruk av GeoJSON-formatet
             properties: {
                 id: item.id,
-                navn: item.Navn || 'Ukjent'
+                navn: item.Navn || 'Ukjent',
+                kommune: item.Komunne || 'Ukjent',
+                betjeningsgrad: item.Betjeningsgrad || 'Ukjent',    
+                sengeplasser: item.Sengeplasser || 'Ukjent'
             } 
         }))
     };
