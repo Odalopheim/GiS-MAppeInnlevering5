@@ -35,6 +35,7 @@ const showFotruteButton = document.getElementById('showFotRuter');
 let isRouteInfoVisible = false;
 let isRouteVisible = false;
 let isHytterVisible = false;
+let isFotruteVisible = false;
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {
@@ -84,14 +85,14 @@ showRouteButton.addEventListener('click', async () => {
 // Legg til klikkhendelse for å vise/skjule fotruter
 showFotruteButton.addEventListener('click', async () => {
     if (isRouteVisible) {
-        map.removeLayer(ruterLayer);
-        showFotruteButton.textContent = 'Vis Ruter';
+        map.removeLayer(fotruterLayer);
+        showFotruteButton.textContent = 'Vis Fotruter';
         isRouteVisible = false;
     } else {
         showFotruteButton.textContent = 'Laster...';
-        await fetchGeoJSONFot(map, ruterLayer);
-        ruterLayer.addTo(map);
-        showFotruteButton.textContent = 'Skjul Ruter';
+        await fetchGeoJSONFot(map, fotruterLayer);
+        fotruterLayer.addTo(map);
+        showFotruteButton.textContent = 'Skjul Fotruter';
         isRouteVisible = true;
     }
 });

@@ -1,7 +1,7 @@
 import { supabase } from './supabase.js'; // Importer Supabase-klienten
 
 // Funksjon for egendefinert linje med farge og popup
-export function customLine(feature, color = "#0000D9") {
+export function customLine(feature, color = "#0074D9") {
     let line = L.polyline(feature.geometry.coordinates, {
         color: color,
         weight: 3,
