@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
 import { fetchGeoJSONAnnen } from './annenrute.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
+import { fetchGeoJSONFot } from './fotrute.js';
 
 
 // Supabase URL og API-nøkkel
@@ -20,12 +21,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 const ruteinfopunktLayer = L.layerGroup();
 const ruterLayer = L.layerGroup();
 const hytterLayer = L.layerGroup();
+const fotruterLayer = L.layerGroup();
  
 
 // Hent knapper fra HTML
 const showRouteInfoButton = document.getElementById('showRouteInfo');
 const showRouteButton = document.getElementById('showRoute');
 const showHytterButton = document.getElementById('showHytter');
+const showFotruteButton = document.getElementById('showFotRuter');
 
 
 // Variabler for synlighetsstatus
@@ -74,6 +77,21 @@ showRouteButton.addEventListener('click', async () => {
         await fetchGeoJSONAnnen(map, ruterLayer);
         ruterLayer.addTo(map);
         showRouteButton.textContent = 'Skjul Ruter';
+        isRouteVisible = true;
+    }
+});
+
+// Legg til klikkhendelse for å vise/skjule fotruter
+showFotruteButton.addEventListener('click', async () => {
+    if (isRouteVisible) {
+        map.removeLayer(ruterLayer);
+        showFotruteButton.textContent = 'Vis Ruter';
+        isRouteVisible = false;
+    } else {
+        showFotruteButton.textContent = 'Laster...';
+        await fetchGeoJSONFot(map, ruterLayer);
+        ruterLayer.addTo(map);
+        showFotruteButton.textContent = 'Skjul Ruter';
         isRouteVisible = true;
     }
 });
