@@ -13,10 +13,18 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
 </head>
 <body>
     <div id="map"></div>
-    <button id="showRouteInfo">Vis Ruteinformasjon</button>
+    <div id="menu">
+        <button id="toggleMenu">☰</button>
+        <div id="menuContent">
+            <button id="showRouteInfo">Vis Ruteinformasjon</button>
+            <button id="showRoute">Vis Ruter</button>
+            <button id="showHytter">Vis Hytter</button>
+        </div>
+    </div>
 
     <!-- Link to external JavaScript file -->
     <script type="module" src="script.js"></script>

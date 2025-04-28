@@ -1,5 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
+import { fetchGeoJSONAnnen } from './annenrute.js';
+import { fetchGeoJSONHytter } from './dnt_hytter.js';
+
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -12,24 +15,31 @@ var map = L.map('map').setView([58.5, 7.5], 8);
 // Legg til OpenStreetMap bakgrunn
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// Lag nytt lag for ruteinfopunkter
+
+// Lag nytt lag for ruteinfopunkter og linjer
 const ruteinfopunktLayer = L.layerGroup();
+const ruterLayer = L.layerGroup();
+const hytterLayer = L.layerGroup();
+ 
 
-// Hent knappen fra HTML
+// Hent knapper fra HTML
 const showRouteInfoButton = document.getElementById('showRouteInfo');
+const showRouteButton = document.getElementById('showRoute');
+const showHytterButton = document.getElementById('showHytter');
 
-// Variabel for å holde styr på om ruteinformasjonen er synlig
+
+// Variabler for synlighetsstatus
 let isRouteInfoVisible = false;
+let isRouteVisible = false;
+let isHytterVisible = false;
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {
     if (isRouteInfoVisible) {
-        // Fjern ruteinformasjonen fra kartet
         map.removeLayer(ruteinfopunktLayer);
         showRouteInfoButton.textContent = 'Vis Ruteinformasjon';
         isRouteInfoVisible = false;
     } else {
-        // Hent og vis ruteinformasjonen på kartet
         showRouteInfoButton.textContent = 'Laster...';
         await fetchGeoJSON(map, ruteinfopunktLayer);
         ruteinfopunktLayer.addTo(map);
@@ -38,9 +48,60 @@ showRouteInfoButton.addEventListener('click', async () => {
     }
 });
 
-const gpxURL = "https://ws.geonorge.no/hoydedata/v1/";
-const endpoint = `http://openwps.statkart.no/skwms1/wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevation&datainputs=lat=60;lon=10;epsg=4326${encodeURIComponent(gpxURL)}`;
+// Legg til klikkhendelse for å vise/skjule hytter
+showHytterButton.addEventListener('click', async () => {
+    console.log('Knappen for hytter ble trykket');
+    if (isHytterVisible) {
+        map.removeLayer(hytterLayer);
+        showHytterButton.textContent = 'Vis Hytter';
+        isHytterVisible = false;
+    } else {
+        showHytterButton.textContent = 'Laster...';
+        await fetchGeoJSONHytter(map, hytterLayer);
+        hytterLayer.addTo(map);
+        showHytterButton.textContent = 'Skjul Hytter';
+        isHytterVisible = true;
+    }
+});
+// Legg til klikkhendelse for å vise/skjule ruter
+showRouteButton.addEventListener('click', async () => {
+    if (isRouteVisible) {
+        map.removeLayer(ruterLayer);
+        showRouteButton.textContent = 'Vis Ruter';
+        isRouteVisible = false;
+    } else {
+        showRouteButton.textContent = 'Laster...';
+        await fetchGeoJSONAnnen(map, ruterLayer);
+        ruterLayer.addTo(map);
+        showRouteButton.textContent = 'Skjul Ruter';
+        isRouteVisible = true;
+    }
+});
+const toggleMenuButton = document.getElementById('toggleMenu');
+const menuContent = document.getElementById('menuContent');
 
-fetch(endpoint)
-  .then(res => res.json())
-  .then(data => console.log("Høgdeprofil:", data));
+toggleMenuButton.addEventListener('click', () => {
+    if (menuContent.style.display === 'none' || menuContent.style.display === '') {
+        menuContent.style.display = 'block'; // Vis menyen
+    } else {
+        menuContent.style.display = 'none'; // Skjul menyen
+    }
+});
+
+// Legg til geolokalisering for å finne brukerens posisjon
+map.locate({ setView: true, maxZoom: 16 });
+
+// Håndtering av når brukerens posisjon er funnet
+map.on('locationfound', (e) => {
+    // Opprett markør for brukerens posisjon
+    const userMarker = L.marker(e.latlng).addTo(map);
+    userMarker.bindPopup("Du er her!").openPopup();
+
+    // Sentere kartet på brukerens posisjon
+    map.setView(e.latlng, 16); // Zoomnivå 16 for nærmere visning
+});
+
+// Håndtering av feil når posisjonen ikke kan finnes
+map.on('locationerror', (e) => {
+    alert("Kunne ikke finne din posisjon: " + e.message); // Vise feilmelding hvis posisjon ikke kan bestemmes
+});
