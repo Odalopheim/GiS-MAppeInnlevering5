@@ -1,78 +1,46 @@
-// Importer Supabase-klienten
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
+import { fetchGeoJSON } from './ruteinfopunkt.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwdHRzeXdsaHNoaXZmc3lzd3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2MzQzMjQsImV4cCI6MjA2MDIxMDMyNH0.bEJZQOS5bqHmDrO1vNCkX0hirsz7zDp1QsBxdoywxbA';
-const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Opprett kartet
-var map = L.map('map').setView([58.5, 7-.5], 8);
+var map = L.map('map').setView([58.5, 7.5], 8);
 
 // Legg til OpenStreetMap bakgrunn
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// Legg til søkefunksjon i kartet
-L.Control.geocoder({ defaultMarkGeocode: false }).on('markgeocode', function(e) {
-    var bbox = e.geocode.bbox;
-    var poly = L.polygon([
-        bbox.getSouthEast(),
-        bbox.getNorthEast(),
-        bbox.getNorthWest(),
-        bbox.getSouthWest()
-    ]).addTo(map);
-
-    map.fitBounds(poly.getBounds());
-}).addTo(map);
-
 // Lag nytt lag for ruteinfopunkter
-const ruteinfopunktLayer = L.layerGroup().addTo(map);
+const ruteinfopunktLayer = L.layerGroup();
 
-// Funksjon for egendefinert markør med farge og popup
-function customMarker(feature, latlng, color = "#0074D9") {
-  let marker = L.circleMarker(latlng, {
-    radius: 6,
-    fillColor: color,
-    color: "#000",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.9
-  });
+// Hent knappen fra HTML
+const showRouteInfoButton = document.getElementById('showRouteInfo');
 
-  if (feature.properties.navn) {
-    marker.bindPopup(`<b>${feature.properties.navn}</b>`);
-  }
+// Variabel for å holde styr på om ruteinformasjonen er synlig
+let isRouteInfoVisible = false;
 
-  return marker;
-}
+// Legg til klikkhendelse for å vise/skjule ruteinformasjon
+showRouteInfoButton.addEventListener('click', async () => {
+    if (isRouteInfoVisible) {
+        // Fjern ruteinformasjonen fra kartet
+        map.removeLayer(ruteinfopunktLayer);
+        showRouteInfoButton.textContent = 'Vis Ruteinformasjon';
+        isRouteInfoVisible = false;
+    } else {
+        // Hent og vis ruteinformasjonen på kartet
+        showRouteInfoButton.textContent = 'Laster...';
+        await fetchGeoJSON(map, ruteinfopunktLayer);
+        ruteinfopunktLayer.addTo(map);
+        showRouteInfoButton.textContent = 'Skjul Ruteinformasjon';
+        isRouteInfoVisible = true;
+    }
+});
 
-// Hent og vis ruteinfopunkt
-async function fetchGeoJSON() {
-  const { data, error } = await supabase
-    .from('ruteinfopunkt_geojson_view') // Bruker en view fra supabase som allerede har GeoJSON-formatet
-    .select('id, navn, geom'); // geom er allerede i GeoJSON-format
+const gpxURL = "https://ws.geonorge.no/hoydedata/v1/";
+const endpoint = `http://openwps.statkart.no/skwms1/wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevation&datainputs=lat=60;lon=10;epsg=4326${encodeURIComponent(gpxURL)}`;
 
-  if (error) {
-    console.error('Feil ved henting av data:', error);
-    return;
-  }
-
-  const geojson = {
-    type: 'FeatureCollection',
-    features: data.map(item => ({
-      type: 'Feature',
-      geometry: item.geom, // Direkte bruk av GeoJSON-formatet 
-      properties: {
-        id: item.id,
-        navn: item.navn || 'Ukjent'
-      }
-    }))
-  };
-
-  // Legg til i lag med tilpasset markør
-  L.geoJSON(geojson, {
-    pointToLayer: (feature, latlng) => customMarker(feature, latlng, "#0074D9") 
-  }).addTo(ruteinfopunktLayer);
-}
-
-fetchGeoJSON();
+fetch(endpoint)
+  .then(res => res.json())
+  .then(data => console.log("Høgdeprofil:", data));

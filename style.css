@@ -15,3 +15,19 @@
      display: inline-block;
      margin-right: 5px;
  }
+ /* Stil for knappen */
+#showRouteInfo {
+    position: absolute;
+    top: 10px;
+    right: 10px; /* Flytt knappen til høyre */
+    z-index: 1000;
+    background-color: #0074D9; /* Blå bakgrunn */
+    color: white; /* Hvit tekst */
+    border: none; /* Fjern kantlinje */
+    border-radius: 5px; /* Runde hjørner */
+    padding: 10px 15px; /* Polstring */
+    font-size: 14px; /* Tekststørrelse */
+    cursor: pointer; /* Endre musepekeren til hånd */
+    box-shadow: 0 4px 6px rgb(253, 252, 252); /* Skygge */
+    transition: background-color 0.3s ease; 
+}
