@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
+import { fetchGeoJSONAnnen } from './annenrute.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -12,24 +13,25 @@ var map = L.map('map').setView([58.5, 7.5], 8);
 // Legg til OpenStreetMap bakgrunn
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// Lag nytt lag for ruteinfopunkter
+// Lag nytt lag for ruteinfopunkter og linjer
 const ruteinfopunktLayer = L.layerGroup();
+const ruterLayer = L.layerGroup();
 
-// Hent knappen fra HTML
+// Hent knapper fra HTML
 const showRouteInfoButton = document.getElementById('showRouteInfo');
+const showRouteButton = document.getElementById('showRoute');
 
-// Variabel for å holde styr på om ruteinformasjonen er synlig
+// Variabler for synlighetsstatus
 let isRouteInfoVisible = false;
+let isRouteVisible = false;
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {
     if (isRouteInfoVisible) {
-        // Fjern ruteinformasjonen fra kartet
         map.removeLayer(ruteinfopunktLayer);
         showRouteInfoButton.textContent = 'Vis Ruteinformasjon';
         isRouteInfoVisible = false;
     } else {
-        // Hent og vis ruteinformasjonen på kartet
         showRouteInfoButton.textContent = 'Laster...';
         await fetchGeoJSON(map, ruteinfopunktLayer);
         ruteinfopunktLayer.addTo(map);
@@ -38,9 +40,17 @@ showRouteInfoButton.addEventListener('click', async () => {
     }
 });
 
-const gpxURL = "https://ws.geonorge.no/hoydedata/v1/";
-const endpoint = `http://openwps.statkart.no/skwms1/wps.elevation2?request=Execute&service=WPS&version=1.0.0&identifier=elevation&datainputs=lat=60;lon=10;epsg=4326${encodeURIComponent(gpxURL)}`;
-
-fetch(endpoint)
-  .then(res => res.json())
-  .then(data => console.log("Høgdeprofil:", data));
+// Legg til klikkhendelse for å vise/skjule ruter
+showRouteButton.addEventListener('click', async () => {
+    if (isRouteVisible) {
+        map.removeLayer(ruterLayer);
+        showRouteButton.textContent = 'Vis Ruter';
+        isRouteVisible = false;
+    } else {
+        showRouteButton.textContent = 'Laster...';
+        await fetchGeoJSONAnnen(map, ruterLayer);
+        ruterLayer.addTo(map);
+        showRouteButton.textContent = 'Skjul Ruter';
+        isRouteVisible = true;
+    }
+});
