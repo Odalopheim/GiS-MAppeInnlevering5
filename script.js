@@ -99,4 +99,67 @@ map.on('locationfound', (e) => {
 // Håndtering av feil når posisjonen ikke kan finnes
 map.on('locationerror', (e) => {
     alert("Kunne ikke finne din posisjon: " + e.message);
+
 });
+
+let startMarker = null;
+let endMarker = null;
+
+// Funksjon for å legge til en markør
+const addMarker = (latlng, label, color) => {
+    return L.marker(latlng, {
+        icon: L.divIcon({
+            className: 'custom-marker',
+            html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%;"></div>`,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        })
+    }).bindPopup(label).addTo(map);
+};
+
+// Funksjon for å sette startposisjon
+const setStartPosition = (latlng) => {
+    if (startMarker) {
+        map.removeLayer(startMarker);
+    }
+    startMarker = addMarker(latlng, 'Startposisjon', 'green');
+};
+
+// Funksjon for å sette sluttposisjon
+const setEndPosition = (latlng) => {
+    if (endMarker) {
+        map.removeLayer(endMarker);
+    }
+    endMarker = addMarker(latlng, 'Sluttposisjon', 'red');
+};
+
+// Funksjon for å beregne avstand mellom start og slutt
+const calculateDistance = () => {
+    if (startMarker && endMarker) {
+        const startLatLng = startMarker.getLatLng();
+        const endLatLng = endMarker.getLatLng();
+        const distance = startLatLng.distanceTo(endLatLng); // Avstand i meter
+        alert(`Avstanden mellom start og slutt er ${(distance / 1000).toFixed(2)} km.`);
+    } else {
+        alert('Både start- og sluttposisjon må være satt.');
+    }
+};
+
+// Legg til knapper for å sette start- og sluttposisjon
+map.on('click', (e) => {
+    const { lat, lng } = e.latlng;
+    const action = prompt('Vil du sette startposisjon eller sluttposisjon? (skriv "start" eller "slutt")');
+    if (action === 'start') {
+        setStartPosition(e.latlng);
+    } else if (action === 'slutt') {
+        setEndPosition(e.latlng);
+    }
+});
+
+// Legg til en knapp for å beregne avstand
+const calculateDistanceButton = document.getElementById('calculateDistance');
+if (calculateDistanceButton) {
+    calculateDistanceButton.addEventListener('click', calculateDistance);
+} else {
+    console.warn('Knappen med ID "calculateDistance" finnes ikke.');
+}
