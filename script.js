@@ -3,6 +3,8 @@ import { fetchGeoJSON } from './ruteinfopunkt.js';
 import { fetchGeoJSONAnnen } from './annenrute.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
 import { fetchGeoJSONFot } from './fotrute.js';
+import { fetchGeoJSONSki } from './skiloype.js';
+import { fetchGeoJSONSykkel } from './sykkelrute.js';
 
 
 // Supabase URL og API-nøkkel
@@ -22,6 +24,8 @@ const ruteinfopunktLayer = L.layerGroup();
 const ruterLayer = L.layerGroup();
 const hytterLayer = L.layerGroup();
 const fotruterLayer = L.layerGroup();
+const skiloypeLayer = L.layerGroup();
+const sykkelruteLayer = L.layerGroup();
  
 
 // Hent knapper fra HTML
@@ -29,6 +33,8 @@ const showRouteInfoButton = document.getElementById('showRouteInfo');
 const showRouteButton = document.getElementById('showRoute');
 const showHytterButton = document.getElementById('showHytter');
 const showFotruteButton = document.getElementById('showFotRuter');
+const showSkiloypeButton = document.getElementById('showSkiloyper');
+const showSykkelruteButton = document.getElementById('showSykkelruter');
 
 
 // Variabler for synlighetsstatus
@@ -36,6 +42,8 @@ let isRouteInfoVisible = false;
 let isRouteVisible = false;
 let isHytterVisible = false;
 let isFotruteVisible = false;
+let isSkiloypeVisible = false;
+let isSykkelruteVisible = false;
 
 // Legg til klikkhendelse for å vise/skjule ruteinformasjon
 showRouteInfoButton.addEventListener('click', async () => {
@@ -84,18 +92,49 @@ showRouteButton.addEventListener('click', async () => {
 
 // Legg til klikkhendelse for å vise/skjule fotruter
 showFotruteButton.addEventListener('click', async () => {
-    if (isRouteVisible) {
+    if (isFotruteVisible) {
         map.removeLayer(fotruterLayer);
         showFotruteButton.textContent = 'Vis Fotruter';
-        isRouteVisible = false;
+        isFotruteVisible = false;
     } else {
         showFotruteButton.textContent = 'Laster...';
         await fetchGeoJSONFot(map, fotruterLayer);
         fotruterLayer.addTo(map);
         showFotruteButton.textContent = 'Skjul Fotruter';
-        isRouteVisible = true;
+        isFotruteVisible = true;
     }
 });
+
+// Legg til klikkhendelse for å vise/skjule skiløyper
+showSkiloypeButton.addEventListener('click', async () => {
+    if (isSkiloypeVisible) {
+        map.removeLayer(skiloypeLayer);
+        showSkiloypeButton.textContent = 'Vis Skiløype';
+        isSkiloypeVisible = false;
+    } else {
+        showSkiloypeButton.textContent = 'Laster...';
+        await fetchGeoJSONSki(map, skiloypeLayer);
+        skiloypeLayer.addTo(map);
+        showSkiloypeButton.textContent = 'Skjul Skiløpye';
+        isSkiloypeVisible = true;
+    }
+});
+
+// Legg til klikkhendelse for å vise/skjule sykkelruter
+showSykkelruteButton.addEventListener('click', async () => {
+    if (isSykkelruteVisible) {
+        map.removeLayer(sykkelruteLayer);
+        showSykkelruteButton.textContent = 'Vis Sykkelruter';
+        isSykkelruteVisible = false;
+    } else {
+        showSykkelruteButton.textContent = 'Laster...';
+        await fetchGeoJSONSykkel(map, sykkelruteLayer);
+        sykkelruteLayer.addTo(map);
+        showSykkelruteButton.textContent = 'Skjul Sykkelruter';
+        isSykkelruteVisible = true;
+    }
+});
+
 const toggleMenuButton = document.getElementById('toggleMenu');
 const menuContent = document.getElementById('menuContent');
 

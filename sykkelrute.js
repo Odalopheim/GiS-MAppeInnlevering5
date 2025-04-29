@@ -16,9 +16,9 @@ export function customLine(feature, color = "#0074D9") {
 }
 
 // Funksjon for å hente og vise ruteinfo
-export async function fetchGeoJSONFot(map, layerGroup) {
+export async function fetchGeoJSONSykkel(map, layerGroup) {
     const { data, error } = await supabase
-        .from('fotruter_geojson_view') // Bruker en view fra Supabase som allerede har GeoJSON-formatet
+        .from('sykkelrute_geojson_view') // Bruker en view fra Supabase som allerede har GeoJSON-formatet
         .select('id, navn, geom'); // geom er allerede i GeoJSON-format
 
     if (error) {
