@@ -28,7 +28,7 @@ const layers = {
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
     sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
-    SkredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone }, // Endret nøkkel
+    skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone }, // Endret nøkkel
 };
 
 // Felles funksjon for klikkhendelser

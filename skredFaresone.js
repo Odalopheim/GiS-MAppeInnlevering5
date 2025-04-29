@@ -18,11 +18,15 @@ export function customPolygon(feature, color = "#0074D9") {
 // Funksjon for å hente og vise polygoninfo
 export async function fetchGeoJSONSkredFaresone(map, layerGroup) {
     const { data, error } = await supabase
-        .from('skredfaresoner_geojson_view') // Endre til riktig tabell eller view
+        .from('skredfaresone_geojson_view') // Sørg for at dette er riktig tabell eller view
         .select('id, navn, geom');
 
     if (error) {
         console.error('Feil ved henting av data:', error);
+        return;
+    }
+
+    if (!data || data.length === 0) {
         return;
     }
 
