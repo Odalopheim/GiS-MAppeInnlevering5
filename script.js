@@ -1,11 +1,15 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
-import { fetchGeoJSON } from './ruteinfopunkt.js';
-import { fetchGeoJSONAnnen } from './annenrute.js';
+import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
 import { fetchGeoJSONFot } from './fotrute.js';
 import { fetchGeoJSONSki } from './skiloype.js';
 import { fetchGeoJSONSykkel } from './sykkelrute.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
+import { fetchGeoJSONFot } from './ruter.js';
+import { fetchGeoJSONSki } from './ruter.js';
+import { fetchGeoJSONSykkel } from './ruter.js';
+import { fetchGeoJSONAnnen } from './ruter.js';
+
 
 
 // Supabase URL og API-nøkkel
@@ -22,13 +26,15 @@ const createLayer = () => L.layerGroup();
 
 // Konfigurer lagene og visningsstatus
 const layers = {
-    routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSON },
+    routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONRuteInfo },
     route: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONAnnen },
     hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
-    skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
+    skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJ
     sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
     skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone }, // Endret nøkkel
+    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel }
+
 };
 
 // Felles funksjon for klikkhendelser
