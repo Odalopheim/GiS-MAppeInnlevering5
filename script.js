@@ -1,13 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
-import { fetchGeoJSONFot } from './ruter.js';
-import { fetchGeoJSONSki } from './ruter.js';
-import { fetchGeoJSONSykkel } from './ruter.js';
-import { fetchGeoJSONAnnen } from './ruter.js';
-
-
-
+import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
+import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -28,13 +23,17 @@ const layers = {
     hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
-    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel }
+    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
+    skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone }
 };
 
 // Felles funksjon for klikkhendelser
 const toggleLayer = async (id) => {
     const layerConfig = layers[id];
-    if (!layerConfig) return;
+    if (!layerConfig) {
+        console.error(`Lagkonfigurasjon for ${id} mangler.`);
+        return;
+    }
 
     const { layer, visible, fetchFunction } = layerConfig;
     const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
@@ -45,7 +44,7 @@ const toggleLayer = async (id) => {
         layerConfig.visible = false;
     } else {
         button.textContent = 'Laster...';
-        await fetchFunction(map, layer); // Dynamisk hent data
+        await fetchFunction(map, layer); // Henter data dynamisk
         layer.addTo(map);
         button.textContent = `Skjul ${capitalizeFirstLetter(id)}`;
         layerConfig.visible = true;
@@ -53,14 +52,17 @@ const toggleLayer = async (id) => {
 };
 
 // Funksjon for å kapitalisere første bokstav i en streng
-const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1); 
+const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 // Legg til hendelser for alle knapper
-['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter'].forEach((id) => {
+['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter', 'skredFaresone'].forEach((id) => {
     const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
-    button.addEventListener('click', () => toggleLayer(id));
+    if (button) {
+        button.addEventListener('click', () => toggleLayer(id));
+    } else {
+        console.warn(`Knappen med ID show${capitalizeFirstLetter(id)} finnes ikke.`);
+    }
 });
-
 
 // Dynamisk lasting ved flytting eller zooming
 map.on('moveend', async () => {
@@ -87,15 +89,12 @@ map.locate({ setView: true, maxZoom: 16 });
 
 // Håndtering av når brukerens posisjon er funnet
 map.on('locationfound', (e) => {
-    // Opprett markør for brukerens posisjon
     const userMarker = L.marker(e.latlng).addTo(map);
     userMarker.bindPopup("Du er her!").openPopup();
-
-    // Sentere kartet på brukerens posisjon
-    map.setView(e.latlng, 16); // Zoomnivå 16 for nærmere visning
+    map.setView(e.latlng, 16);
 });
 
 // Håndtering av feil når posisjonen ikke kan finnes
 map.on('locationerror', (e) => {
-    alert("Kunne ikke finne din posisjon: " + e.message); // Vise feilmelding hvis posisjon ikke kan bestemmes
+    alert("Kunne ikke finne din posisjon: " + e.message);
 });
