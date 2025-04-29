@@ -1,10 +1,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
-import { fetchGeoJSONAnnen } from './annenrute.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
-import { fetchGeoJSONFot } from './fotrute.js';
-import { fetchGeoJSONSki } from './skiloype.js';
-import { fetchGeoJSONSykkel } from './sykkelrute.js';
+import { fetchGeoJSONFot } from './ruter.js';
+import { fetchGeoJSONSki } from './ruter.js';
+import { fetchGeoJSONSykkel } from './ruter.js';
+import { fetchGeoJSONAnnen } from './ruter.js';
+
+
 
 
 // Supabase URL og API-nøkkel
@@ -13,126 +15,60 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Opprett kartet
-var map = L.map('map').setView([58.5, 7.5], 8);
-
-// Legg til OpenStreetMap bakgrunn
+const map = L.map('map').setView([58.5, 7.5], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+// Felles funksjon for å opprette lag
+const createLayer = () => L.layerGroup();
 
-// Lag nytt lag for ruteinfopunkter og linjer
-const ruteinfopunktLayer = L.layerGroup();
-const ruterLayer = L.layerGroup();
-const hytterLayer = L.layerGroup();
-const fotruterLayer = L.layerGroup();
-const skiloypeLayer = L.layerGroup();
-const sykkelruteLayer = L.layerGroup();
- 
+// Konfigurer lagene og visningsstatus
+const layers = {
+    routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSON },
+    route: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONAnnen },
+    hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
+    fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
+    skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
+    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel }
+};
 
-// Hent knapper fra HTML
-const showRouteInfoButton = document.getElementById('showRouteInfo');
-const showRouteButton = document.getElementById('showRoute');
-const showHytterButton = document.getElementById('showHytter');
-const showFotruteButton = document.getElementById('showFotRuter');
-const showSkiloypeButton = document.getElementById('showSkiloyper');
-const showSykkelruteButton = document.getElementById('showSykkelruter');
+// Felles funksjon for klikkhendelser
+const toggleLayer = async (id) => {
+    const layerConfig = layers[id];
+    if (!layerConfig) return;
 
+    const { layer, visible, fetchFunction } = layerConfig;
+    const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
 
-// Variabler for synlighetsstatus
-let isRouteInfoVisible = false;
-let isRouteVisible = false;
-let isHytterVisible = false;
-let isFotruteVisible = false;
-let isSkiloypeVisible = false;
-let isSykkelruteVisible = false;
-
-// Legg til klikkhendelse for å vise/skjule ruteinformasjon
-showRouteInfoButton.addEventListener('click', async () => {
-    if (isRouteInfoVisible) {
-        map.removeLayer(ruteinfopunktLayer);
-        showRouteInfoButton.textContent = 'Vis Ruteinformasjon';
-        isRouteInfoVisible = false;
+    if (visible) {
+        map.removeLayer(layer);
+        button.textContent = `Vis ${capitalizeFirstLetter(id)}`;
+        layerConfig.visible = false;
     } else {
-        showRouteInfoButton.textContent = 'Laster...';
-        await fetchGeoJSON(map, ruteinfopunktLayer);
-        ruteinfopunktLayer.addTo(map);
-        showRouteInfoButton.textContent = 'Skjul Ruteinformasjon';
-        isRouteInfoVisible = true;
+        button.textContent = 'Laster...';
+        await fetchFunction(map, layer); // Dynamisk hent data
+        layer.addTo(map);
+        button.textContent = `Skjul ${capitalizeFirstLetter(id)}`;
+        layerConfig.visible = true;
     }
+};
+
+// Funksjon for å kapitalisere første bokstav i en streng
+const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1); 
+
+// Legg til hendelser for alle knapper
+['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter'].forEach((id) => {
+    const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
+    button.addEventListener('click', () => toggleLayer(id));
 });
 
-// Legg til klikkhendelse for å vise/skjule hytter
-showHytterButton.addEventListener('click', async () => {
-    console.log('Knappen for hytter ble trykket');
-    if (isHytterVisible) {
-        map.removeLayer(hytterLayer);
-        showHytterButton.textContent = 'Vis Hytter';
-        isHytterVisible = false;
-    } else {
-        showHytterButton.textContent = 'Laster...';
-        await fetchGeoJSONHytter(map, hytterLayer);
-        hytterLayer.addTo(map);
-        showHytterButton.textContent = 'Skjul Hytter';
-        isHytterVisible = true;
-    }
-});
-// Legg til klikkhendelse for å vise/skjule ruter
-showRouteButton.addEventListener('click', async () => {
-    if (isRouteVisible) {
-        map.removeLayer(ruterLayer);
-        showRouteButton.textContent = 'Vis Ruter';
-        isRouteVisible = false;
-    } else {
-        showRouteButton.textContent = 'Laster...';
-        await fetchGeoJSONAnnen(map, ruterLayer);
-        ruterLayer.addTo(map);
-        showRouteButton.textContent = 'Skjul Ruter';
-        isRouteVisible = true;
-    }
-});
 
-// Legg til klikkhendelse for å vise/skjule fotruter
-showFotruteButton.addEventListener('click', async () => {
-    if (isFotruteVisible) {
-        map.removeLayer(fotruterLayer);
-        showFotruteButton.textContent = 'Vis Fotruter';
-        isFotruteVisible = false;
-    } else {
-        showFotruteButton.textContent = 'Laster...';
-        await fetchGeoJSONFot(map, fotruterLayer);
-        fotruterLayer.addTo(map);
-        showFotruteButton.textContent = 'Skjul Fotruter';
-        isFotruteVisible = true;
-    }
-});
-
-// Legg til klikkhendelse for å vise/skjule skiløyper
-showSkiloypeButton.addEventListener('click', async () => {
-    if (isSkiloypeVisible) {
-        map.removeLayer(skiloypeLayer);
-        showSkiloypeButton.textContent = 'Vis Skiløype';
-        isSkiloypeVisible = false;
-    } else {
-        showSkiloypeButton.textContent = 'Laster...';
-        await fetchGeoJSONSki(map, skiloypeLayer);
-        skiloypeLayer.addTo(map);
-        showSkiloypeButton.textContent = 'Skjul Skiløpye';
-        isSkiloypeVisible = true;
-    }
-});
-
-// Legg til klikkhendelse for å vise/skjule sykkelruter
-showSykkelruteButton.addEventListener('click', async () => {
-    if (isSykkelruteVisible) {
-        map.removeLayer(sykkelruteLayer);
-        showSykkelruteButton.textContent = 'Vis Sykkelruter';
-        isSykkelruteVisible = false;
-    } else {
-        showSykkelruteButton.textContent = 'Laster...';
-        await fetchGeoJSONSykkel(map, sykkelruteLayer);
-        sykkelruteLayer.addTo(map);
-        showSykkelruteButton.textContent = 'Skjul Sykkelruter';
-        isSykkelruteVisible = true;
-    }
+// Dynamisk lasting ved flytting eller zooming
+map.on('moveend', async () => {
+    Object.keys(layers).forEach(async (id) => {
+        if (layers[id].visible) {
+            await layers[id].fetchFunction(map, layers[id].layer); // Dynamisk datahenting
+        }
+    });
 });
 
 const toggleMenuButton = document.getElementById('toggleMenu');
