@@ -1,10 +1,12 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSON } from './ruteinfopunkt.js';
-import { fetchGeoJSONAnnen } from './annenrute.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
-import { fetchGeoJSONFot } from './fotrute.js';
-import { fetchGeoJSONSki } from './skiloype.js';
-import { fetchGeoJSONSykkel } from './sykkelrute.js';
+import { fetchGeoJSONFot } from './ruter.js';
+import { fetchGeoJSONSki } from './ruter.js';
+import { fetchGeoJSONSykkel } from './ruter.js';
+import { fetchGeoJSONAnnen } from './ruter.js';
+
+
 
 
 // Supabase URL og API-nøkkel
@@ -26,7 +28,7 @@ const layers = {
     hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
-    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
+    sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel }
 };
 
 // Felles funksjon for klikkhendelser
