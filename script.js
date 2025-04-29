@@ -3,6 +3,7 @@ import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
 import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
+import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js'; // Importer én gang
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -24,7 +25,8 @@ const layers = {
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
     sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
-    skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone }
+    skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone },
+    kvikkleireFare: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONKvikkleireFare },
 };
 
 // Felles funksjon for klikkhendelser
@@ -55,7 +57,7 @@ const toggleLayer = async (id) => {
 const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 // Legg til hendelser for alle knapper
-['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter', 'skredFaresone'].forEach((id) => {
+['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter', 'skredFaresone', 'kvikkleireFare'].forEach((id) => {
     const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
     if (button) {
         button.addEventListener('click', () => toggleLayer(id));
