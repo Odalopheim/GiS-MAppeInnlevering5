@@ -168,24 +168,71 @@ if (calculateDistanceButton) {
 // Hent brukerens posisjon og sett den som startpunkt for routing
 map.locate({ setView: true, maxZoom: 16 });
 
-map.on('locationfound', (e) => {
-    const userLatLng = e.latlng; // Brukerens posisjon
+// Funksjon for å oppdatere ruten basert på brukerens adresser
+const updateRouteWithUserAddresses = async () => {
+    // Be brukeren om å skrive inn start- og sluttadresser
+    const startAddress = prompt('Skriv inn startadresse:');
+    const endAddress = prompt('Skriv inn sluttadresse:');
 
-    // Opprett routing med brukerens posisjon som startpunkt
-    L.Routing.control({
-        waypoints: [
-            L.latLng(userLatLng.lat, userLatLng.lng), // Brukerens posisjon
-            L.latLng(58.1667, 8.0000)  // UIA 
-        ],
-        routeWhileDragging: true, // Tillat rutejustering ved dragging
-        geocoder: L.Control.Geocoder.nominatim() // Bruk geokoding for adresser
-    }).addTo(map);
+    if (!startAddress || !endAddress) {
+        alert('Du må skrive inn både start- og sluttadresser.');
+        return;
+    }
 
-    // Marker brukerens posisjon
-    const userMarker = L.marker(userLatLng).addTo(map);
-    userMarker.bindPopup("Du er her!").openPopup();
-});
+    try {
+        // Geokoding av startadresse
+        const startResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(startAddress)}`);
+        const startData = await startResponse.json();
 
-map.on('locationerror', (e) => {
-    alert("Kunne ikke finne din posisjon: " + e.message);
-});
+        if (startData.length === 0) {
+            alert('Fant ikke startadressen. Sjekk at den er riktig.');
+            return;
+        }
+
+        const startLat = parseFloat(startData[0].lat);
+        const startLng = parseFloat(startData[0].lon);
+
+        // Geokoding av sluttadresse
+        const endResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endAddress)}`);
+        const endData = await endResponse.json();
+
+        if (endData.length === 0) {
+            alert('Fant ikke sluttadressen. Sjekk at den er riktig.');
+            return;
+        }
+
+        const endLat = parseFloat(endData[0].lat);
+        const endLng = parseFloat(endData[0].lon);
+
+        // Opprett routing med de geokodede punktene
+        L.Routing.control({
+            waypoints: [
+                L.latLng(startLat, startLng), // Startpunkt
+                L.latLng(endLat, endLng)      // Sluttpunkt
+            ],
+            routeWhileDragging: true, // Tillat rutejustering ved dragging
+            geocoder: L.Control.Geocoder.nominatim() // Bruk geokoding for adresser
+        }).addTo(map);
+
+        // Marker start- og sluttpunktene
+        const startMarker = L.marker([startLat, startLng]).addTo(map);
+        startMarker.bindPopup(`Startpunkt: ${startAddress}`).openPopup();
+
+        const endMarker = L.marker([endLat, endLng]).addTo(map);
+        endMarker.bindPopup(`Sluttpunkt: ${endAddress}`).openPopup();
+    } catch (error) {
+        console.error('Feil under geokoding:', error);
+        alert('Det oppsto en feil under geokoding. Prøv igjen senere.');
+    }
+};
+
+// Legg til en knapp for å oppdatere ruten med brukerens adresser
+const userInputRouteButton = document.createElement('button');
+userInputRouteButton.textContent = 'Legg inn egne adresser';
+userInputRouteButton.style.position = 'absolute';
+userInputRouteButton.style.top = '10px';
+userInputRouteButton.style.left = '10px';
+userInputRouteButton.style.zIndex = '1000';
+document.body.appendChild(userInputRouteButton);
+
+userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
