@@ -163,3 +163,12 @@ if (calculateDistanceButton) {
 } else {
     console.warn('Knappen med ID "calculateDistance" finnes ikke.');
 }
+
+L.Routing.control({
+    waypoints: [
+        L.latLng(58.1667, 8.0000), // UIA Kristiansand
+        L.latLng(58.3406, 8.5934)  // UIA Grimstad
+    ],
+    routeWhileDragging: true, // Tillat rutejustering ved dragging
+    geocoder: L.Control.Geocoder.nominatim() // Bruk geokoding for adresser
+}).addTo(map);
