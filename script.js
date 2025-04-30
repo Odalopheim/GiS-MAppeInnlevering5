@@ -164,11 +164,28 @@ if (calculateDistanceButton) {
     console.warn('Knappen med ID "calculateDistance" finnes ikke.');
 }
 
-L.Routing.control({
-    waypoints: [
-        L.latLng(58.1667, 8.0000), // UIA Kristiansand
-        L.latLng(58.3406, 8.5934)  // UIA Grimstad
-    ],
-    routeWhileDragging: true, // Tillat rutejustering ved dragging
-    geocoder: L.Control.Geocoder.nominatim() // Bruk geokoding for adresser
-}).addTo(map);
+
+// Hent brukerens posisjon og sett den som startpunkt for routing
+map.locate({ setView: true, maxZoom: 16 });
+
+map.on('locationfound', (e) => {
+    const userLatLng = e.latlng; // Brukerens posisjon
+
+    // Opprett routing med brukerens posisjon som startpunkt
+    L.Routing.control({
+        waypoints: [
+            L.latLng(userLatLng.lat, userLatLng.lng), // Brukerens posisjon
+            L.latLng(58.1667, 8.0000)  // UIA 
+        ],
+        routeWhileDragging: true, // Tillat rutejustering ved dragging
+        geocoder: L.Control.Geocoder.nominatim() // Bruk geokoding for adresser
+    }).addTo(map);
+
+    // Marker brukerens posisjon
+    const userMarker = L.marker(userLatLng).addTo(map);
+    userMarker.bindPopup("Du er her!").openPopup();
+});
+
+map.on('locationerror', (e) => {
+    alert("Kunne ikke finne din posisjon: " + e.message);
+});
