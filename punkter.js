@@ -32,7 +32,7 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
     };
 
     // Legg til i lag med tilpasset markør eller linje
-    layerGroup.clearLayers(); // Tøm laget før du legger til nye data
+    layerGroup.clearLayers();
     L.geoJSON(geojson, {
         pointToLayer: (feature, latlng) => customMarker(feature, latlng, color),
         style: {
@@ -41,9 +41,15 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
             opacity: 1
         },
         onEachFeature: (feature, layer) => {
-            if (feature.properties.navn) {
-                layer.bindPopup(`<b>${feature.properties.navn}</b>`);
-            }
+            // pop-up med informasjon om hyttene 
+            const { navn, kommune, betjeningsgrad, sengeplasser } = feature.properties;
+            const popupContent = `
+                <b>Navn:</b> ${navn}<br> 
+                <b>Kommune:</b> ${kommune}<br>
+                <b>Betjeningsgrad:</b> ${betjeningsgrad}<br>
+                <b>Sengeplasser:</b> ${sengeplasser} 
+            `;
+            layer.bindPopup(popupContent);
         }
     }).addTo(layerGroup);
 }
