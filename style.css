@@ -60,3 +60,12 @@
 #menuContent button:hover {
     background-color: #0056a3;
 }
+.custom-marker div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
