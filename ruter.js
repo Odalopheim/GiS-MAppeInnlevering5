@@ -2,9 +2,16 @@ import { supabase } from './supabase.js'; // Importer Supabase-klienten
 
 // Generisk funksjon for å hente og vise GeoJSON-data
 export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#0074D9") {
+    const bounds = map.getBounds();
+    const boundsJson = {
+        west: bounds.getWest(),
+        south: bounds.getSouth(),
+        east: bounds.getEast(),
+        north: bounds.getNorth()
+    };
+
     const { data, error } = await supabase
-        .from(tableName) // Bruker tabellnavnet som parameter
-        .select('id, navn, geom'); // Sørg for at feltene er konsistente i alle tabeller
+        .rpc('get_routes_in_bounds', { bounds: boundsJson, view_name: tableName });
 
     if (error) {
         console.error(`Feil ved henting av data fra ${tableName}:`, error);
@@ -20,7 +27,7 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
         type: 'FeatureCollection',
         features: data.map(item => ({
             type: 'Feature',
-            geometry: item.geom, // GeoJSON-linjer for ruter
+            geometry: item.geom,
             properties: {
                 id: item.id,
                 navn: item.navn || 'Ukjent'
@@ -28,13 +35,12 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
         }))
     };
 
-    // Legg til i lag med tilpasset linje
-    layerGroup.clearLayers(); // Tøm laget før du legger til nye data
+    layerGroup.clearLayers();
     L.geoJSON(geojson, {
         style: {
             color: color,
             weight: 3,
-            opacity: 1
+            opacity: 0.7
         },
         onEachFeature: (feature, layer) => {
             if (feature.properties.navn) {
@@ -43,7 +49,6 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
         }
     }).addTo(layerGroup);
 }
-
 //fotturer
 
 export async function fetchGeoJSONFot(map, layerGroup) {
