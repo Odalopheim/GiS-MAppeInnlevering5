@@ -29,6 +29,16 @@ const layers = {
     kvikkleireFare: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONKvikkleireFare },
 };
 
+// Dynamisk lasting ved flytting eller zooming
+map.on('moveend', async () => {
+    Object.keys(layers).forEach(async (id) => {
+        const layerConfig = layers[id];
+        if (layerConfig.visible) {
+            await layerConfig.fetchFunction(map, layerConfig.layer); // Hent data dynamisk for synlig utsnitt
+        }
+    });
+});
+
 // Felles funksjon for klikkhendelser
 const toggleLayer = async (id) => {
     const layerConfig = layers[id];
@@ -46,7 +56,7 @@ const toggleLayer = async (id) => {
         layerConfig.visible = false;
     } else {
         button.textContent = 'Laster...';
-        await fetchFunction(map, layer); // Henter data dynamisk
+        await fetchFunction(map, layer); // Hent data for synlig utsnitt
         layer.addTo(map);
         button.textContent = `Skjul ${capitalizeFirstLetter(id)}`;
         layerConfig.visible = true;
@@ -66,14 +76,7 @@ const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + strin
     }
 });
 
-// Dynamisk lasting ved flytting eller zooming
-map.on('moveend', async () => {
-    Object.keys(layers).forEach(async (id) => {
-        if (layers[id].visible) {
-            await layers[id].fetchFunction(map, layers[id].layer); // Dynamisk datahenting
-        }
-    });
-});
+
 
 const toggleMenuButton = document.getElementById('toggleMenu');
 const menuContent = document.getElementById('menuContent');
