@@ -4,6 +4,8 @@ import { fetchGeoJSONHytter } from './dnt_hytter.js';
 import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js'; // Importer én gang
+import { fetchAndSendHytter } from './dnt_hytter.js';
+import { fetch_all_ruter } from './ruter.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -239,3 +241,94 @@ userInputRouteButton.style.zIndex = '1000';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
+
+// 2. Variabel for å lagre brukerens posisjon
+let brukerPosisjon = null;
+
+// 3. Finn brukerens posisjon
+map.locate({ setView: true, maxZoom: 16 });
+
+map.on('locationfound', (e) => {
+    brukerPosisjon = {
+        lat: e.latitude,
+        lng: e.longitude
+    };
+
+    const userMarker = L.marker(e.latlng).addTo(map);
+    userMarker.bindPopup("Du er her!").openPopup();
+});
+
+map.on('locationerror', (e) => {
+    alert("Kunne ikke finne din posisjon: " + e.message);
+});
+
+// 4. Hent og vis hytte-markører
+fetch('http://localhost:5000/fetch_dnt_hytter')
+  .then(res => res.json())
+  .then(data => {
+    data.data.features.forEach(hytte => {
+      const [lng, lat] = hytte.geometry.coordinates;
+      const hytteId = hytte.properties.id;
+      const hytteNavn = hytte.properties.name || "Ukjent navn";
+
+      const marker = L.marker([lat, lng]).addTo(map);
+      marker.bindPopup(`${hytteNavn} <br><button onclick="velgHytte('${hytteId}')">Gå hit</button>`);
+    });
+  });
+
+// 5. Funksjon som kalles når bruker klikker "Gå hit"
+function velgHytte(hytteId) {
+    if (!brukerPosisjon) {
+        alert("Brukerposisjon ikke tilgjengelig enda.");
+        return;
+    }
+
+    fetch('http://localhost:5000/shortestpath_to_hytte', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            start_point: brukerPosisjon,
+            hytte_id: hytteId
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            data.features.forEach(f => {
+                const wkt = f.geometry;
+                const coords = wkt
+                    .replace('LINESTRING (', '')
+                    .replace(')', '')
+                    .split(', ')
+                    .map(pair => {
+                        const [x, y] = pair.split(' ').map(Number);
+                        const latlng = proj4('EPSG:3395', 'EPSG:4326', [x, y]);
+                        return [latlng[1], latlng[0]];
+                    });
+
+                L.polyline(coords, { color: 'blue' }).addTo(map);
+            });
+        } else {
+            alert("Feil: " + data.error);
+        }
+    })
+    .catch(err => console.error("Feil ved rutehenting:", err));
+}
+
+fetch('http://127.0.0.1:5000/fetch_ruter')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+
+
+    document.getElementById('hytterBackend').addEventListener('click', async () => {
+        const response = await fetch('http://127.0.0.1:5000/fetch_ruter');
+        const data = await response.json();
+        console.log(data);
+    });
+
+// Kall funksjonen for å hente og sende hyttedata og rute data
+fetchAndSendHytter();
+fetch_all_ruter();

@@ -69,3 +69,43 @@ export async function fetchGeoJSONSykkel(map, layerGroup) {
 export async function fetchGeoJSONAnnen(map, layerGroup) {
     await fetchGeoJSONRuter(map, layerGroup, 'annenrute_geojson_view', '#FF33A1');
 }
+
+export async function fetch_all_ruter() {
+    try {
+        const response = await fetch('http://localhost:5000/fetch_all_ruter');
+        const data = await response.json();
+
+        if (data.success && data.data.features) {
+            data.data.features.forEach((rute) => {
+                const coords = rute.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+                let color;
+
+                // Velg farge basert på rutetypen
+                switch (rute.properties.type) {
+                    case "Annenrute":
+                        color = "purple";
+                        break;
+                    case "Fottur":
+                        color = "green";
+                        break;
+                    case "Sykkelrute":
+                        color = "blue";
+                        break;
+                    case "Skirute":
+                        color = "red";
+                        break;
+                    default:
+                        color = "gray";
+                }
+
+                // Legg til ruten på kartet
+                const polyline = L.polyline(coords, { color }).addTo(map);
+                polyline.bindPopup(`${rute.properties.type}: ${rute.properties.name}`);
+            });
+        } else {
+            console.error('Feil ved henting av ruter:', data.error);
+        }
+    } catch (err) {
+        console.error('Feil ved henting av ruter:', err);
+    }
+}
