@@ -69,3 +69,22 @@
     font-weight: bold;
     text-align: center;
 }
+
+.legend-snoskred {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width:70px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.legend-snoskred img {
+    vertical-align: middle;
+    margin-right: 5px;
+}

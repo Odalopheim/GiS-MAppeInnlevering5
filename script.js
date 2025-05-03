@@ -3,7 +3,8 @@ import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
 import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
-import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js'; // Importer én gang
+import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
+import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -17,7 +18,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 // Felles funksjon for å opprette lag
 const createLayer = () => L.layerGroup();
 
-// Konfigurer lagene og visningsstatus
+
 const layers = {
     routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONRuteInfo },
     route: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONAnnen },
@@ -27,19 +28,11 @@ const layers = {
     sykkelruter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSykkel },
     skredFaresone: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSkredFaresone },
     kvikkleireFare: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONKvikkleireFare },
+    nveBratthet: nveBratthetLayer
 };
 
-// Dynamisk lasting ved flytting eller zooming
-map.on('moveend', async () => {
-    Object.keys(layers).forEach(async (id) => {
-        const layerConfig = layers[id];
-        if (layerConfig.visible) {
-            await layerConfig.fetchFunction(map, layerConfig.layer); // Hent data dynamisk for synlig utsnitt
-        }
-    });
-});
+let legend; 
 
-// Felles funksjon for klikkhendelser
 const toggleLayer = async (id) => {
     const layerConfig = layers[id];
     if (!layerConfig) {
@@ -47,27 +40,45 @@ const toggleLayer = async (id) => {
         return;
     }
 
-    const { layer, visible, fetchFunction } = layerConfig;
+    const { layer, visible } = layerConfig;
     const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
 
     if (visible) {
         map.removeLayer(layer);
         button.textContent = `Vis ${capitalizeFirstLetter(id)}`;
         layerConfig.visible = false;
+
+        if (legend) {
+            map.removeControl(legend);
+            legend = null;
+        }
     } else {
-        button.textContent = 'Laster...';
-        await fetchFunction(map, layer); // Hent data for synlig utsnitt
         layer.addTo(map);
         button.textContent = `Skjul ${capitalizeFirstLetter(id)}`;
         layerConfig.visible = true;
+
+        if (id === 'nveBratthet') {
+            legend = createBratthetLegend();
+            legend.addTo(map);
+        }
     }
 };
 
+// Dynamisk lasting ved flytting eller zooming
+map.on('moveend', async () => {
+    Object.keys(layers).forEach(async (id) => {
+        const layerConfig = layers[id];
+        if (layerConfig.visible && layerConfig.fetchFunction) {
+            // Hent data dynamisk for synlig utsnitt hvis fetchFunction er definert
+            await layerConfig.fetchFunction(map, layerConfig.layer);
+        }
+    });
+});
 // Funksjon for å kapitalisere første bokstav i en streng
 const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 // Legg til hendelser for alle knapper
-['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter', 'skredFaresone', 'kvikkleireFare'].forEach((id) => {
+['routeInfo', 'route', 'hytter', 'fotRuter', 'skiloyper', 'sykkelruter', 'skredFaresone', 'kvikkleireFare', 'nveBratthet'].forEach((id) => {
     const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
     if (button) {
         button.addEventListener('click', () => toggleLayer(id));
