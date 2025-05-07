@@ -1,3 +1,4 @@
+import { createBratthetLegend } from './bratthet.js';
 // Dynamisk lasting ved flytting eller zooming
 export const enableDynamicLoading = (map, layers) => {
     map.on('moveend', async () => {
@@ -12,18 +13,25 @@ export const enableDynamicLoading = (map, layers) => {
 
 // Funksjon for å kapitalisere første bokstav i en streng
 export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+let bratthetLegend = null; // Legend må leve utenfor funksjonen for å kunne fjernes senere
 
-// Legg til hendelser for alle knapper og oppdater tekst
 export const addLayerToggleButtons = (map, layers) => {
     Object.keys(layers).forEach((id) => {
         const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
         if (button) {
             button.addEventListener('click', () => {
                 const layerConfig = layers[id];
+                const isBratthet = id === 'nveBratthet';
+
                 if (layerConfig.visible) {
                     map.removeLayer(layerConfig.layer);
                     layerConfig.visible = false;
                     button.textContent = button.textContent.replace(/^Fjern/, 'Vis');
+
+                    if (isBratthet && bratthetLegend) {
+                        map.removeControl(bratthetLegend);
+                        bratthetLegend = null;
+                    }
                 } else {
                     map.addLayer(layerConfig.layer);
                     if (layerConfig.fetchFunction) {
@@ -31,6 +39,11 @@ export const addLayerToggleButtons = (map, layers) => {
                     }
                     layerConfig.visible = true;
                     button.textContent = button.textContent.replace(/^Vis/, 'Fjern');
+
+                    if (isBratthet && !bratthetLegend) {
+                        bratthetLegend = createBratthetLegend();
+                        bratthetLegend.addTo(map);
+                    }
                 }
             });
         } else {
