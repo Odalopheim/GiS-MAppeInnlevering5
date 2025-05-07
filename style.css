@@ -88,3 +88,16 @@
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.north-arrow {
+    position: absolute;
+    bottom: 10px; /* Plasser pilen 10px fra bunnen */
+    left: 10px;   /* Plasser pilen 10px fra venstre */
+    width: 50px;
+    height: 50px;
+    background-image: url('./images/north-arrow.png'); /* Sett riktig filbane */
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 1000; /* Sørg for at pilen vises over kartet */
+    opacity: 0.8;  /* Gjør pilen litt gjennomsiktig */
+}
