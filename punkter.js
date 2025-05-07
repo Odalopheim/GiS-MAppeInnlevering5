@@ -23,10 +23,10 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
             geometry: item.geom, // GeoJSON-linjer eller punkter
             properties: {
                 id: item.id,
-                navn: item.navn || item.Navn || 'Ukjent',
-                kommune: item.kommune || item.Komunne || 'Ukjent',
-                betjeningsgrad: item.betjeningsgrad || item.Betjeningsgrad || 'Ukjent',
-                sengeplasser: item.sengeplasser || item.Sengeplasser || 'Ukjent'
+                navn: item.navn || item.navn || 'Ukjent',
+                kommune: item.kommune || item.kommune || 'Ukjent',
+                betjeningsgrad: item.betjeningsgrad || item.betjeningsgrad || 'Ukjent',
+                sengeplasser: item.sengeplasser || item.sengeplasser || 'Ukjent'
             }
         }))
     };
