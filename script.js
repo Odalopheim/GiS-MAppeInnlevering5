@@ -42,6 +42,9 @@ const layers = {
     nveBratthet: nveBratthetLayer
 };
 
+// Legg til bratthetslegenden
+createBratthetLegend(map);
+
 // Aktiver dynamisk lasting av lag
 enableDynamicLoading(map, layers);
 

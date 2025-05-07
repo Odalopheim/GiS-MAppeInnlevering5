@@ -18,7 +18,19 @@ export const addLayerToggleButtons = (map, layers) => {
     Object.keys(layers).forEach((id) => {
         const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
         if (button) {
-            button.addEventListener('click', () => toggleLayer(map, id, layers));
+            button.addEventListener('click', () => {
+                const layerConfig = layers[id];
+                if (layerConfig.visible) {
+                    map.removeLayer(layerConfig.layer);
+                    layerConfig.visible = false;
+                } else {
+                    map.addLayer(layerConfig.layer);
+                    if (layerConfig.fetchFunction) {
+                        layerConfig.fetchFunction(map, layerConfig.layer);
+                    }
+                    layerConfig.visible = true;
+                }
+            });
         } else {
             console.warn(`Knappen med ID show${capitalizeFirstLetter(id)} finnes ikke.`);
         }
