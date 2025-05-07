@@ -9,7 +9,7 @@ export const nveBratthetLayer = {
     visible: false
 };
 
-export const createBratthetLegend = () => {
+export const createBratthetLegend = (map) => {
     const legend = L.control({ position: 'bottomleft' });
 
     legend.onAdd = () => {
@@ -26,5 +26,5 @@ export const createBratthetLegend = () => {
         return div;
     };
 
-    return legend;
+    legend.addTo(map); // Legg til legenden på kartet
 };
