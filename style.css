@@ -23,6 +23,9 @@
 }
 
 #toggleMenu {
+    position: absolute;
+    top: 0;
+    right: 0;
     background-color: #0074D9;
     color: white;
     border: none;
@@ -35,6 +38,9 @@
 }
 
 #menuContent {
+    position: absolute; /* Sørg for at menyen ikke påvirker knappen */
+    top: 40px; /* Plasser menyen rett under knappen */
+    right: 0;
     display: none; /* Skjul menyen som standard */
     background: white;
     border-radius: 5px;
