@@ -42,7 +42,7 @@ const layers = {
 };
 
 // Legg til bratthetslegenden
-createBratthetLegend(map);
+const bratthetLegend = createBratthetLegend(map);
 
 // Aktiver dynamisk lasting av lag
 enableDynamicLoading(map, layers);
