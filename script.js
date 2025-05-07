@@ -1,7 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
-import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
+import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel } from './ruter.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
 import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
@@ -32,7 +32,6 @@ const createLayer = () => L.layerGroup();
 // Definer lagene
 const layers = {
     routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONRuteInfo },
-    route: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONAnnen },
     hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
