@@ -5,6 +5,7 @@ import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
 import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
+import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -250,3 +251,20 @@ userInputRouteButton.style.zIndex = '1000';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
+
+let søkerEtterHytte = false;
+
+const finnHytteButton = document.getElementById('hentNarmesteHytte');
+if (finnHytteButton) {
+    finnHytteButton.addEventListener('click', () => {
+        søkerEtterHytte = true;
+        map.locate({ setView: true, maxZoom: 14 });
+    });
+}
+
+map.on('locationfound', async (e) => {
+    if (!søkerEtterHytte) return;
+    søkerEtterHytte = false;
+
+    await hentNarmesteHytteOgVis(e.latlng.lat, e.latlng.lng, map);
+});
