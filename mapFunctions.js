@@ -13,7 +13,7 @@ export const enableDynamicLoading = (map, layers) => {
 // Funksjon for å kapitalisere første bokstav i en streng
 export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
-// Legg til hendelser for alle knapper
+// Legg til hendelser for alle knapper og oppdater tekst
 export const addLayerToggleButtons = (map, layers) => {
     Object.keys(layers).forEach((id) => {
         const button = document.getElementById(`show${capitalizeFirstLetter(id)}`);
@@ -23,12 +23,14 @@ export const addLayerToggleButtons = (map, layers) => {
                 if (layerConfig.visible) {
                     map.removeLayer(layerConfig.layer);
                     layerConfig.visible = false;
+                    button.textContent = button.textContent.replace(/^Fjern/, 'Vis');
                 } else {
                     map.addLayer(layerConfig.layer);
                     if (layerConfig.fetchFunction) {
                         layerConfig.fetchFunction(map, layerConfig.layer);
                     }
                     layerConfig.visible = true;
+                    button.textContent = button.textContent.replace(/^Vis/, 'Fjern');
                 }
             });
         } else {
@@ -44,9 +46,9 @@ export const setupMenuToggle = () => {
 
     toggleMenuButton.addEventListener('click', () => {
         if (menuContent.style.display === 'none' || menuContent.style.display === '') {
-            menuContent.style.display = 'block'; // Vis menyen
+            menuContent.style.display = 'block';
         } else {
-            menuContent.style.display = 'none'; // Skjul menyen
+            menuContent.style.display = 'none';
         }
     });
 };
