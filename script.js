@@ -79,9 +79,7 @@ if (calculateDistanceButton) {
 const userInputRouteButton = document.createElement('button');
 userInputRouteButton.textContent = 'Legg inn egne adresser';
 userInputRouteButton.style.position = 'absolute';
-userInputRouteButton.style.top = '10px';
-userInputRouteButton.style.left = '10px';
-userInputRouteButton.style.zIndex = '1000';
+userInputRouteButton.className = 'user-input-route-button';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', () => updateRouteWithUserAddresses(map));
