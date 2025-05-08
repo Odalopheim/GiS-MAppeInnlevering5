@@ -17,7 +17,7 @@
  }
  #menu {
     position: absolute;
-    top: 10px;
+    top: 20px;
     right: 10px;
     z-index: 1000;
 }
@@ -29,17 +29,21 @@
     background-color: #0074D9;
     color: white;
     border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#toggleMenu:hover {
+    background-color: #0056a3; /* Mørkere blå ved hover */
+    transform: scale(1.05); /* Gjør knappen litt større ved hover */
 }
 
 #menuContent {
     position: absolute; /* Sørg for at menyen ikke påvirker knappen */
-    top: 40px; /* Plasser menyen rett under knappen */
+    top: 50px; /* Plasser menyen rett under knappen */
     right: 0;
     display: none; /* Skjul menyen som standard */
     background: white;
@@ -110,7 +114,7 @@
 
 .user-input-route-button {
     position: absolute;
-    top: 100px; 
+    top: 20px; 
     left: 10px; 
     z-index: 1000; 
     background-color: #0074D9; 
@@ -128,4 +132,11 @@
 .user-input-route-button:hover {
     background-color: #0056a3; 
     transform: scale(1.05); 
+}
+
+.leaflet-control-zoom {
+    position: absolute;
+    top: 50px; /* Plasser zoomkontrollene under knappen "Legg inn egne adresser" */
+    left: 0px; /* Juster til venstre */
+    z-index: 1000; /* Sørg for at zoomkontrollene vises over kartet */
 }
