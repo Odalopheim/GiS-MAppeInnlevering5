@@ -66,12 +66,20 @@ export const setupMenuToggle = () => {
     });
 };
 
-// Geolokalisering
+// Geolokalisering 
 export const enableGeolocation = (map) => {
     map.locate({ setView: true, maxZoom: 16 });
 
     map.on('locationfound', (e) => {
-        const userMarker = L.marker(e.latlng).addTo(map);
+        const userMarker = L.marker(e.latlng, {
+            icon: L.divIcon({
+                className: 'user-location-marker',
+                html: `<div style="background-color: blue; width: 25px; height: 25px; border-radius: 50%; border: 3px solid white;"></div>`,
+                iconSize: [25, 25],
+                iconAnchor: [12.5, 12.5]
+            })
+        }).addTo(map);
+
         userMarker.bindPopup("Du er her!").openPopup();
         map.setView(e.latlng, 16);
     });

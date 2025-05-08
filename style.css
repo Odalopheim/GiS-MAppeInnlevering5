@@ -97,13 +97,35 @@
 
 .north-arrow {
     position: absolute;
-    bottom: 10px; /* Plasser pilen 10px fra bunnen */
-    right: 10px;   /* Plasser pilen 10px fra venstre */
+    bottom: 10px; 
+    right: 10px;   
     width: 50px;
     height: 50px;
-    background-image: url('./images/north-arrow.png'); /* Sett riktig filbane */
+    background-image: url('./images/north-arrow.png'); 
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 1000; /* Sørg for at pilen vises over kartet */
-    opacity: 0.8;  /* Gjør pilen litt gjennomsiktig */
+    z-index: 1000; 
+    opacity: 0.8;  
+}
+
+.user-input-route-button {
+    position: absolute;
+    top: 100px; 
+    left: 10px; 
+    z-index: 1000; 
+    background-color: #0074D9; 
+    color: white; 
+    border: none;
+    border-radius: 8px; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+
+.user-input-route-button:hover {
+    background-color: #0056a3; 
+    transform: scale(1.05); 
 }
