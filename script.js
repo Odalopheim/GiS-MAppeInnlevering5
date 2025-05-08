@@ -16,6 +16,8 @@ import {
     updateRouteWithUserAddresses 
 } from './mapFunctions.js';
 import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
+import { setupFilterButtons } from './filterRoutes.js';
+
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -41,6 +43,9 @@ const layers = {
     kvikkleireFare: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONKvikkleireFare },
     nveBratthet: nveBratthetLayer
 };
+
+// Sett opp filterknapper
+setupFilterButtons(map, layers);
 
 // Legg til bratthetslegenden
 createBratthetLegend(map);

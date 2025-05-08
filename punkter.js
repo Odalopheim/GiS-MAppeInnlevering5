@@ -8,12 +8,12 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
 
     if (error) {
         console.error(`Feil ved henting av data fra ${tableName}:`, error);
-        return;
+        return null; // Returner null ved feil
     }
 
     if (!data || data.length === 0) {
         console.warn(`Ingen data funnet i ${tableName}.`);
-        return;
+        return null; // Returner null hvis ingen data finnes
     }
 
     const geojson = {
@@ -23,10 +23,10 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
             geometry: item.geom, // GeoJSON-linjer eller punkter
             properties: {
                 id: item.id,
-                navn: item.navn || item.navn || 'Ukjent',
-                kommune: item.kommune || item.kommune || 'Ukjent',
-                betjeningsgrad: item.betjeningsgrad || item.betjeningsgrad || 'Ukjent',
-                sengeplasser: item.sengeplasser || item.sengeplasser || 'Ukjent'
+                navn: item.navn || 'Ukjent',
+                kommune: item.kommune || 'Ukjent',
+                betjeningsgrad: item.betjeningsgrad || 'Ukjent',
+                sengeplasser: item.sengeplasser || 'Ukjent'
             }
         }))
     };
@@ -41,7 +41,6 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
             opacity: 1
         },
         onEachFeature: (feature, layer) => {
-            // pop-up med informasjon om hyttene 
             const { navn, kommune, betjeningsgrad, sengeplasser } = feature.properties;
             const popupContent = `
                 <b>Navn:</b> ${navn}<br> 
@@ -52,7 +51,10 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
             layer.bindPopup(popupContent);
         }
     }).addTo(layerGroup);
+
+    return geojson; // Returner geojson-objektet
 }
+
 export function customMarker(feature, latlng, color = "#0074D9") {
     let marker = L.circleMarker(latlng, {
         radius: 3,

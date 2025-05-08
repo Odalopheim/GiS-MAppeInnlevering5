@@ -10,17 +10,21 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
         north: bounds.getNorth()
     };
 
+    console.log('Bounding box sendt til Supabase:', boundsJson);
+
     const { data, error } = await supabase
         .rpc('get_routes_in_bounds', { bounds: boundsJson, view_name: tableName });
 
     if (error) {
         console.error(`Feil ved henting av data fra ${tableName}:`, error);
-        return;
+        return null;
     }
+
+    console.log(`Data returnert fra Supabase (${tableName}):`, data);
 
     if (!data || data.length === 0) {
         console.warn(`Ingen data funnet i ${tableName}.`);
-        return;
+        return null;
     }
 
     const geojson = {
@@ -35,6 +39,8 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
         }))
     };
 
+    console.log('GeoJSON generert:', geojson);
+
     layerGroup.clearLayers();
     L.geoJSON(geojson, {
         style: {
@@ -48,12 +54,26 @@ export async function fetchGeoJSONRuter(map, layerGroup, tableName, color = "#00
             }
         }
     }).addTo(layerGroup);
+
+    return geojson;
 }
 //fotturer
 
-export async function fetchGeoJSONFot(map, layerGroup) {
-    await fetchGeoJSONRuter(map, layerGroup, 'fotruter_geojson_view', '#0074D9');
+export async function fetchGeoJSONFot(map, layerGroup, hytterGeoJSON = null, filter = false) {
+    const geojson = await fetchGeoJSONRuter(map, layerGroup, 'fotruter_geojson_view', '#0074D9');
 
+    if (!geojson || !geojson.features) {
+        console.warn('Ingen fotruter funnet.');
+        return null; // Returner null hvis ingen data finnes
+    }
+
+    console.log('Fotruter GeoJSON:', geojson);
+
+    if (filter && hytterGeoJSON) {
+        console.log('Filtrering er aktivert, men logikken håndteres i filterRoutes.js.');
+    }
+
+    return geojson; // Returner GeoJSON-objektet
 }
 //skiløyper
 export async function fetchGeoJSONSki(map, layerGroup) {
