@@ -26,9 +26,9 @@ Vi har brukt følgende datasett:
       - https://kartkatalog.geonorge.no/metadata/kvikkleire/a29b905c-6aaa-4283-ae2c-d167624c08a8
 4. Snøskredfare
       - https://nve.geodataonline.no/arcgis/rest/services/Bratthet/MapServer
-6. DNT Hytter
+5. DNT Hytter
       - Selvlaget datasett med informasion hentet fra DNT sine hjemmesider og Ut.no
-7. OpenStreetMap - leaflet
+6. OpenStreetMap - leaflet
       - https://leafletjs.com/download.html
 
 ## **Implementasjon**
