@@ -5,17 +5,10 @@ import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel } from './ruter.js
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
 import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
-import { 
-    enableDynamicLoading, 
-    addLayerToggleButtons, 
-    setupMenuToggle,
-    enableGeolocation, 
-    setStartPosition, 
-    setEndPosition, 
-    calculateDistance, 
-    updateRouteWithUserAddresses 
-} from './mapFunctions.js';
+import { enableDynamicLoading, addLayerToggleButtons, setupMenuToggle,enableGeolocation, 
+    setStartPosition, setEndPosition, calculateDistance, } from './mapFunctions.js';
 import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
+import { updateRouteWithUserAddresses } from './routingMachine.js';
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
