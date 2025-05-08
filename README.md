@@ -19,7 +19,7 @@ Disse valgene ble tatt fordi Supabase gir en enkel, skalerbar og effektiv løsni
 Vi har brukt følgende datasett: 
 
 1. Turutebase
-      -https://kartkatalog.geonorge.no/metadata/turrutebasen/d1422d17-6d95-4ef1-96ab-8af31744dd63
+      - https://kartkatalog.geonorge.no/metadata/turrutebasen/d1422d17-6d95-4ef1-96ab-8af31744dd63
 2. Skredfare
       - https://kartkatalog.geonorge.no/metadata/skredfaresoner/b2d5aaf8-79ac-40f3-9cd6-fdc30bc42ea1
 3. Kvikkleire
