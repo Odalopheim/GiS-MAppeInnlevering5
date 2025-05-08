@@ -26,5 +26,5 @@ export const createBratthetLegend = () => {
         return div;
     };
 
-    return legend;
+    return legend; // returner uten å legge til
 };
