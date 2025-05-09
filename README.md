@@ -1,7 +1,8 @@
 # **God Tur**
 
 ## Problemstilling og Introduksjon
-Formålet med denne oppgaven er å utvikle et interaktivt verktøy som kan bidra til trygg ferdsel i norsk natur.
+
+Formålet med denne oppgaven er å kartlegge beredsskapsituasjonen i Agder, samt å identifisere geografiske områder med utilstrekkelig dekning for å undersøke mulige tiltak til forbedring.
 
 "God Tur" er en applikasjon som kombinerer informasjon om turruter, skredfaresoner og beredskapstilbud som DNT-hytter og gir brukeren et helhetlig verktøy for trygg turplanlegging. Målet er å bidra til forebygging av ulykker og senke terskelen for å fra ut på tur i nye områder på en trygg måte, uansett erfaring. Løsningen er utviklet med brukervennlighet i fokus og skal fungere som både en digital turplanlegger og som et støtteverktøy for trygg ferdsel.
 
