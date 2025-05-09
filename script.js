@@ -1,22 +1,15 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 import { fetchGeoJSONRuteInfo } from './ruteinfopunkt.js';
 import { fetchGeoJSONHytter } from './dnt_hytter.js';
-import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel, fetchGeoJSONAnnen } from './ruter.js';
+import { fetchGeoJSONFot, fetchGeoJSONSki, fetchGeoJSONSykkel } from './ruter.js';
 import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
 import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
-import { 
-    enableDynamicLoading, 
-    addLayerToggleButtons, 
-    setupMenuToggle,
-    enableGeolocation, 
-    setStartPosition, 
-    setEndPosition, 
-    calculateDistance, 
-    updateRouteWithUserAddresses 
-} from './mapFunctions.js';
+import { enableDynamicLoading, addLayerToggleButtons, setupMenuToggle,enableGeolocation, 
+    setStartPosition, setEndPosition, calculateDistance, } from './mapFunctions.js';
 import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
 import { setupFilterButtons } from './filterRoutes.js';
+import { updateRouteWithUserAddresses } from './routingMachine.js';
 
 
 // Supabase URL og API-nøkkel
@@ -34,7 +27,6 @@ const createLayer = () => L.layerGroup();
 // Definer lagene
 const layers = {
     routeInfo: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONRuteInfo },
-    route: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONAnnen },
     hytter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONHytter },
     fotRuter: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONFot },
     skiloyper: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONSki },
@@ -48,7 +40,7 @@ const layers = {
 setupFilterButtons(map, layers);
 
 // Legg til bratthetslegenden
-createBratthetLegend(map);
+const bratthetLegend = createBratthetLegend(map);
 
 // Aktiver dynamisk lasting av lag
 enableDynamicLoading(map, layers);
@@ -85,13 +77,10 @@ if (calculateDistanceButton) {
 const userInputRouteButton = document.createElement('button');
 userInputRouteButton.textContent = 'Legg inn egne adresser';
 userInputRouteButton.style.position = 'absolute';
-userInputRouteButton.style.top = '10px';
-userInputRouteButton.style.left = '10px';
-userInputRouteButton.style.zIndex = '1000';
+userInputRouteButton.className = 'user-input-route-button button-style';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', () => updateRouteWithUserAddresses(map));
-userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
 
 let søkerEtterHytte = false;
 

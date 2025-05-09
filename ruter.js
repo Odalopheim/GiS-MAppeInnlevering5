@@ -84,8 +84,3 @@ export async function fetchGeoJSONSki(map, layerGroup) {
 export async function fetchGeoJSONSykkel(map, layerGroup) {
     await fetchGeoJSONRuter(map, layerGroup, 'sykkelrute_geojson_view', '#FF5733');
 }
-
-//annenrute
-export async function fetchGeoJSONAnnen(map, layerGroup) {
-    await fetchGeoJSONRuter(map, layerGroup, 'annenrute_geojson_view', '#FF33A1');
-}

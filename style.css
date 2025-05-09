@@ -1,5 +1,8 @@
  /* Kartet skal ta opp hele skjermen */
- #map { height: 100vh; }
+ #map { 
+    height: 100vh;
+    width: 100vw; 
+}
 
  /* Stil for tegnforklaring */
  .legend {
@@ -15,9 +18,26 @@
      display: inline-block;
      margin-right: 5px;
  }
+
+ /* Felles stil for knapper*/
+ .button-style {
+    background-color: #0074D9; 
+    color: white; 
+    border: none;
+    border-radius: 8px; 
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+}
+
+.button-style:hover {
+    background-color: #0056a3; 
+    transform: scale(1.05); 
+}
+
  #menu {
     position: absolute;
-    top: 10px;
+    top: 20px;
     right: 10px;
     z-index: 1000;
 }
@@ -26,27 +46,21 @@
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #0074D9;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    padding: 12px 20px;
+    font-size: 16px;
+    z-index: 1000;
 }
 
 #menuContent {
-    position: absolute; /* Sørg for at menyen ikke påvirker knappen */
-    top: 40px; /* Plasser menyen rett under knappen */
+    position: absolute; 
+    top: 50px; 
     right: 0;
-    display: none; /* Skjul menyen som standard */
+    display: none; 
     background: white;
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    width: 200px; /* Sett en bredde som passer til knappene */
+    width: 200px; 
 }
 
 #menuContent button {
@@ -97,13 +111,66 @@
 
 .north-arrow {
     position: absolute;
-    bottom: 10px; /* Plasser pilen 10px fra bunnen */
-    right: 10px;   /* Plasser pilen 10px fra venstre */
+    bottom: 10px; 
+    right: 10px;   
     width: 50px;
     height: 50px;
-    background-image: url('./images/north-arrow.png'); /* Sett riktig filbane */
+    background-image: url('./images/north-arrow.png'); 
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 1000; /* Sørg for at pilen vises over kartet */
-    opacity: 0.8;  /* Gjør pilen litt gjennomsiktig */
+    z-index: 1000; 
+    opacity: 0.8;  
+}
+
+.leaflet-control-zoom {
+    position: absolute;
+    top: 50px; 
+    left: 0px; 
+    z-index: 1000; 
+}
+
+.leaflet-routing-container {
+    position: absolute;
+    top: 50px; 
+    right: 10px; 
+    width: 300px; 
+    background-color: white; 
+    padding: 10px;
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+    max-height: 300px;
+    overflow-y: auto; 
+    z-index: 1000; 
+}
+
+.user-input-route-button {
+    position: absolute;
+    top: 20px; 
+    left: 10px; 
+    z-index: 1000; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    font-weight: bold; 
+}
+
+.show-route-button {
+    position: absolute;
+    top: 70px; 
+    right: 10px; 
+    z-index: 1000;
+    padding: 10px; 
+    font-size: 14px; 
+}
+
+.leaflet-routing-container .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 50%;
 }
