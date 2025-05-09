@@ -3,7 +3,7 @@
 ## Problemstilling og Introduksjon
 Formålet med denne oppgaven er å utvikle et interaktivt verktøy som kan bidra til trygg ferdsel i norsk natur.
 
-"God TUr" er en applikasjon som kombinerer informasjon om turruter, skredfaresoner og beredskapstilbud som DNT-hytter og gir brukeren et helhetlig verktøy for trygg turplanlegging. Målet er å bidra til forebygging av ulykker og senke terskelen for å fra ut på tur i nye områder på en trygg måte, uansett erfaring. Løsningen er utviklet med brukervennlighet i fokus og skal fungere som både en digital turplanlegger og som et støtteverktøy for trygg ferdsel.
+"God Tur" er en applikasjon som kombinerer informasjon om turruter, skredfaresoner og beredskapstilbud som DNT-hytter og gir brukeren et helhetlig verktøy for trygg turplanlegging. Målet er å bidra til forebygging av ulykker og senke terskelen for å fra ut på tur i nye områder på en trygg måte, uansett erfaring. Løsningen er utviklet med brukervennlighet i fokus og skal fungere som både en digital turplanlegger og som et støtteverktøy for trygg ferdsel.
 
 ## Hovedfunksjoner
 - Visning av turruter, sykkelruter og skiløyper
