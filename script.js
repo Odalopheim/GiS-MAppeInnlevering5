@@ -8,7 +8,9 @@ import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
 import { enableDynamicLoading, addLayerToggleButtons, setupMenuToggle,enableGeolocation, 
     setStartPosition, setEndPosition, calculateDistance, } from './mapFunctions.js';
 import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
+import { setupFilterButtons } from './filterRoutes.js';
 import { updateRouteWithUserAddresses } from './routingMachine.js';
+
 
 // Supabase URL og API-nøkkel
 const supabaseUrl = 'https://bpttsywlhshivfsyswvz.supabase.co';
@@ -33,6 +35,9 @@ const layers = {
     kvikkleireFare: { layer: createLayer(), visible: false, fetchFunction: fetchGeoJSONKvikkleireFare },
     nveBratthet: nveBratthetLayer
 };
+
+// Sett opp filterknapper
+setupFilterButtons(map, layers);
 
 // Legg til bratthetslegenden
 const bratthetLegend = createBratthetLegend(map);
@@ -72,11 +77,10 @@ if (calculateDistanceButton) {
 const userInputRouteButton = document.createElement('button');
 userInputRouteButton.textContent = 'Legg inn egne adresser';
 userInputRouteButton.style.position = 'absolute';
-userInputRouteButton.className = 'user-input-route-button';
+userInputRouteButton.className = 'user-input-route-button button-style';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', () => updateRouteWithUserAddresses(map));
-userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
 
 let søkerEtterHytte = false;
 
