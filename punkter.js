@@ -55,7 +55,7 @@ export async function fetchGeoJSONPunkter(map, layerGroup, tableName, color = "#
     return geojson; // Returner geojson-objektet
 }
 
-MellomHytter
+
 export function customMarker(feature, latlng, color = "#0074D9") {
     let marker = L.circleMarker(latlng, {
         radius: 3,
@@ -64,20 +64,8 @@ export function customMarker(feature, latlng, color = "#0074D9") {
         weight: 1,
         opacity: 1,
         fillOpacity: 0.9
-
-export function customMarker(feature, latlng) {
-    const hytteIcon = L.icon({
-        iconUrl: './images/hytteIcon.png', // Sett riktig filbane til bildet
-        iconSize: [30, 30], 
-        iconAnchor: [15, 30], 
-        popupAnchor: [0, -30] 
     });
 
-    const marker = L.marker(latlng, { icon: hytteIcon });
-
-    // Sjekk om 'navn' finnes, og sett en fallback-tekst hvis det mangler
-    const navn = feature.properties.navn || 'Ukjent navn';
-    marker.bindPopup(`<b>${navn}</b>`);
-
-    return marker;
+    return marker; // Ensure the function returns the marker
 }
+
