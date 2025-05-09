@@ -1,9 +1,20 @@
 # **God Tur**
 
 ## Problemstilling og Introduksjon
+
 Formålet med denne oppgaven er å kartlegge beredsskapsituasjonen i Agder, samt å identifisere geografiske områder med utilstrekkelig dekning for å undersøke mulige tiltak til forbedring.
 
-(endres til vår oppgave) Begrepet beredsskapsituasjoner er slik gruppen definerer det situasjoner som krever akkutt responstid, ledig kapasitet og geografisk tilgjengelig i situasjoner der fare for menneskeliv og helse oppstår. Oppgaven har spesielt fokus på brannstasjoner, tilfluktsrom, legevakt og sykehus, og legge opp til analyserer forholdet mellom befolkningstettheten og disse institusjonene for å identifisere potensielle sårbare områder. På denne måten håper vi å visualisere og analysere disse datasettene med et interaktivt kart, som potensielt gi innsikt i beredskapssituasjonen og mulige forbedringer.  
+"God Tur" er en applikasjon som kombinerer informasjon om turruter, skredfaresoner og beredskapstilbud som DNT-hytter og gir brukeren et helhetlig verktøy for trygg turplanlegging. Målet er å bidra til forebygging av ulykker og senke terskelen for å fra ut på tur i nye områder på en trygg måte, uansett erfaring. Løsningen er utviklet med brukervennlighet i fokus og skal fungere som både en digital turplanlegger og som et støtteverktøy for trygg ferdsel.
+
+## Hovedfunksjoner
+- Visning av turruter, sykkelruter og skiløyper
+- Visning av faresoner for snøskred, kvikkleire og generelle skredsoner
+- Visning av DNT-hytter
+- Filtrering av turer som leder til hytter (ikke fullstendig fungerende)
+- Finne nærmeste DNT-hytte fra nåværende punkt
+- Generere veibeskrivelser til valgt adresse
+- Beregne avstander i luftlinje mellom valgte punkter
+  
  
 ## Teknologivalg
 Vi har valgt følgende teknologier for implementere løsningen: 
