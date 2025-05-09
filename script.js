@@ -6,7 +6,7 @@ import { fetchGeoJSONSkredFaresone } from './skredFaresone.js';
 import { fetchGeoJSONKvikkleireFare } from './kvikkleireFare.js';
 import { nveBratthetLayer, createBratthetLegend } from './bratthet.js';
 import { enableDynamicLoading, addLayerToggleButtons, setupMenuToggle,enableGeolocation, 
-    setStartPosition, setEndPosition, calculateDistance, } from './mapFunctions.js';
+    setStartPosition, setEndPosition, calculateDistance, addCalculateDistanceButton, addUserInputRouteButton } from './mapFunctions.js';
 import { hentNarmesteHytteOgVis } from './hentNarmesteHytte.js';
 import { setupFilterButtons } from './filterRoutes.js';
 import { updateRouteWithUserAddresses } from './routingMachine.js';
@@ -54,33 +54,11 @@ setupMenuToggle();
 // Aktiver geolokalisering
 enableGeolocation(map);
 
-// Håndter klikk for å sette start- og sluttposisjon
-let startMarker = null;
-let endMarker = null;
+// Legg til "Beregn avstand"-knappen
+addCalculateDistanceButton(map, setStartPosition, setEndPosition, calculateDistance);
 
-map.on('click', (e) => {
-    const action = prompt('Vil du sette startposisjon eller sluttposisjon? (skriv "start" eller "slutt")');
-    if (action === 'start') {
-        startMarker = setStartPosition(map, startMarker, e.latlng);
-    } else if (action === 'slutt') {
-        endMarker = setEndPosition(map, endMarker, e.latlng);
-    }
-});
-
-// Legg til en knapp for å beregne avstand
-const calculateDistanceButton = document.getElementById('calculateDistance');
-if (calculateDistanceButton) {
-    calculateDistanceButton.addEventListener('click', () => calculateDistance(startMarker, endMarker));
-}
-
-// Legg til en knapp for å oppdatere ruten med brukerens adresser
-const userInputRouteButton = document.createElement('button');
-userInputRouteButton.textContent = 'Legg inn egne adresser';
-userInputRouteButton.style.position = 'absolute';
-userInputRouteButton.className = 'user-input-route-button button-style';
-document.body.appendChild(userInputRouteButton);
-
-userInputRouteButton.addEventListener('click', () => updateRouteWithUserAddresses(map));
+// Legg til "Legg inn egne adresser"-knappen
+addUserInputRouteButton(map, updateRouteWithUserAddresses);
 
 let søkerEtterHytte = false;
 
