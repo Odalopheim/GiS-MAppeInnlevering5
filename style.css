@@ -153,6 +153,17 @@
     font-weight: bold; 
 }
 
+/* Stil for "Beregn avstand"-knappen */
+.calculate-distance-button {
+    position: absolute;
+    top: 20px; /* Plasser under "Legg inn egne adresser"-knappen */
+    left: 240px;
+    z-index: 1000;
+    padding: 12px 20px; 
+    font-size: 16px; 
+    font-weight: bold; 
+}
+
 .show-route-button {
     position: absolute;
     top: 70px; 
