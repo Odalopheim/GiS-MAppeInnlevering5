@@ -72,11 +72,10 @@ if (calculateDistanceButton) {
 const userInputRouteButton = document.createElement('button');
 userInputRouteButton.textContent = 'Legg inn egne adresser';
 userInputRouteButton.style.position = 'absolute';
-userInputRouteButton.className = 'user-input-route-button';
+userInputRouteButton.className = 'user-input-route-button button-style';
 document.body.appendChild(userInputRouteButton);
 
 userInputRouteButton.addEventListener('click', () => updateRouteWithUserAddresses(map));
-userInputRouteButton.addEventListener('click', updateRouteWithUserAddresses);
 
 let søkerEtterHytte = false;
 
