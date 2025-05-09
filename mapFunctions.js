@@ -1,4 +1,5 @@
 import { createBratthetLegend } from './bratthet.js';
+
 // Dynamisk lasting ved flytting eller zooming
 export const enableDynamicLoading = (map, layers) => {
     map.on('moveend', async () => {
@@ -129,3 +130,49 @@ export const calculateDistance = (startMarker, endMarker) => {
     }
 };
 
+// Funksjon for å aktivere valg av start- og sluttpunkt
+// Funksjon for å aktivere valg av start- og sluttpunkt
+export const enableDistanceMeasurement = (map) => {
+    let startMarker = null;
+    let endMarker = null;
+
+    const startButton = document.getElementById('setStartPoint');
+    const endButton = document.getElementById('setEndPoint');
+    const calculateButton = document.getElementById('calculateDistance');
+
+    // Variabel for å holde styr på aktiv modus
+    let activeMode = null;
+
+    // Klikkhåndtering for kartet
+    const onMapClick = (e) => {
+        if (activeMode === 'start') {
+            startMarker = setStartPosition(map, startMarker, e.latlng);
+            alert('Startpunkt satt!');
+            activeMode = null; // Deaktiver modus etter bruk
+        } else if (activeMode === 'end') {
+            endMarker = setEndPosition(map, endMarker, e.latlng);
+            alert('Sluttpunkt satt!');
+            activeMode = null; // Deaktiver modus etter bruk
+        }
+    };
+
+    // Legg til kartklikkhåndtering
+    map.on('click', onMapClick);
+
+    // Startpunkt-knapp
+    startButton.addEventListener('click', () => {
+        activeMode = 'start';
+        alert('Klikk på kartet for å sette startpunkt.');
+    });
+
+    // Sluttpunkt-knapp
+    endButton.addEventListener('click', () => {
+        activeMode = 'end';
+        alert('Klikk på kartet for å sette sluttpunkt.');
+    });
+
+    // Beregn avstand-knapp
+    calculateButton.addEventListener('click', () => {
+        calculateDistance(startMarker, endMarker);
+    });
+};
