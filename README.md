@@ -68,6 +68,7 @@ Vi har brukt følgende datasett:
 
 ## **Bilder/Video**
 Her er noen eksempler på visualiseringene av applikasjonen:
+![Gjennomgang av applikasjonen](media/gjennomgang_applikasjon_gif.gif)
 
 
 
