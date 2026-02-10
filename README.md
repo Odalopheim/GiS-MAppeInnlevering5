@@ -57,19 +57,67 @@ Vi har brukt følgende datasett:
 ### **Lokal kjøring**
 1. Klon repoet:  
    ```bash
-   git clone https://github.com/Odalopheim/GiS-Gruppe7-.git
+   git clone https://github.com/Odalopheim/GiS-MAppeInnlevering5.git
    ```
-2. Installer avhengigheter:  
-   Hvis du bruker VS Code, kan du installere Live Server-utvidelsen og klikke "Go Live".
+2. Åpne `Index.html` i en nettleser:  
+   - Hvis du bruker VS Code, kan du installere Live Server-utvidelsen og klikke "Go Live".
+   - Alternativt kan du åpne filen direkte i nettleseren.
 
-## Kjøring via GitHub
-1. Gå til GitHub Repo (https://github.com/Odalopheim/GiS-MAppeInnlevering5.git).
-2. Følg README-instruksjonene for å sette opp løsningen. 
+### **Live Demo**
+Besøk applikasjonen direkte på: [https://odalopheim.github.io/GiS-MAppeInnlevering5/](https://odalopheim.github.io/GiS-MAppeInnlevering5/)
+
+## **Prosjektstruktur**
+```
+.
+├── Index.html              # Hovedfil for applikasjonen
+├── script.js               # Hovedscript som koordinerer funksjonalitet
+├── style.css               # Styling for applikasjonen
+├── supabase.js             # Supabase-konfigurasjon
+├── mapFunctions.js         # Kartfunksjoner og interaktivitet
+├── ruter.js                # Håndtering av turruter (fot, ski, sykkel)
+├── dnt_hytter.js           # Håndtering av DNT-hytter
+├── skredFaresone.js        # Håndtering av skredfaresoner
+├── kvikkleireFare.js       # Håndtering av kvikkleirefare
+├── bratthet.js             # Håndtering av NVE bratthet-data
+├── hentNarmesteHytte.js    # Funksjonalitet for å finne nærmeste hytte
+├── filterRoutes.js         # Filtrering av ruter
+├── routingMachine.js       # Veibeskrivelser og ruting
+├── ruteinfopunkt.js        # Ruteinformasjonspunkter
+├── punkter.js              # Punkthåndtering
+├── polygon.js              # Polygonhåndtering
+├── utils.js                # Hjelpefunksjoner
+├── images/                 # Bilderessurser
+└── media/                  # Media-filer (GIF-er, videoer)
+``` 
 
 ## **Bilder/Video**
 Her er noen eksempler på visualiseringene av applikasjonen:
+
 ![Gjennomgang av applikasjonen](media/gjennomgang_applikasjon_gif.gif)
+*Gjennomgang av applikasjonens hovedfunksjoner*
+
 ![Veivisning](media/veivisning_gif.gif)
+*Eksempel på veibeskrivelser*
 
+## **Tekniske Detaljer**
+- **Frontend-bibliotek**: Leaflet.js v1.x
+- **Kartdata**: OpenStreetMap
+- **Styling**: Vanilla CSS
+- **Moduler**: ES6 Modules
+- **API**: Supabase REST API med PostGIS
 
+## **Krav**
+- Moderne nettleser med støtte for ES6 modules (Chrome, Firefox, Safari, Edge)
+- Internettforbindelse (for kartfliser og API-kall)
 
+## **Feilsøking**
+### Vanlige problemer:
+- **Kartet vises ikke**: Sjekk konsollen i nettleseren for feilmeldinger. Sørg for at du har en aktiv internettforbindelse.
+- **CORS-feil**: Hvis du kjører Index.html direkte fra filsystemet, kan du oppleve CORS-problemer. Bruk en lokal server som Live Server i VS Code.
+- **Data vises ikke**: Verifiser at Supabase API-en er tilgjengelig og at API-nøklene er korrekte.
+
+## **Lisens**
+Dette prosjektet er utviklet som en studentoppgave.
+
+## **Kontakt**
+For spørsmål eller tilbakemeldinger, vennligst opprett en issue i GitHub-repositoryet.
